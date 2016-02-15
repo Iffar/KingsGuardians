@@ -153,8 +153,8 @@ handlers.getPlayerSquad = function(args)
 	var PlayerID = args.PlayerID;
 
 	// Player data	
-	var userData = server.GetUserData({ PlayFabId: PlayerID, Keys: ["CharactersForBattle"] }).Data;
-	var characterIDList = ((typeof userData.CharactersForBattle != 'undefined') && (typeof userData.CharactersForBattle.Value != 'undefined') && userData.CharactersForBattle.Value != "") ? userData.CharactersForBattle.Value.split('|') : "";
+	var userData = server.GetUserData({ PlayFabId: PlayerID, Keys: ["Squad"] }).Data;
+	var characterIDList = ((typeof userData.Squad != 'undefined') && (typeof userData.Squad.Value != 'undefined') && userData.Squad.Value != "") ? userData.Squad.Value.split('|') : "";
 	
 	// Load all the player character
 	var characterList = server.GetAllUsersCharacters({ PlayFabId: PlayerID }).Characters;
