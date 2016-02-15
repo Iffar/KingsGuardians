@@ -1,4 +1,4 @@
-﻿// v0.32
+﻿//  Kings Guardians v0.32
 var TIME_TO_REPAIR_ONE_HEALTH = 60;		// seconds
 var TIME_TO_PRODUCE_GOLD = 60;			// seconds
 var GOLD_PER_HUT_UPGRADE = 1;			// pieces
