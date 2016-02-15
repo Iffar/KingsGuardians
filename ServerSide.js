@@ -176,10 +176,10 @@ handlers.getPlayerSquad = function(args)
 			var info = characterList[i];
 			var data = server.GetCharacterData({
 								PlayFabId: PlayerID,
-								CharacterId: characters[i].CharacterId });
+								CharacterId: characterList[i].CharacterId });
 			var inventory = server.GetCharacterInventory({
 								PlayFabId: PlayerID,
-								CharacterId: characters[i].CharacterId });	
+								CharacterId: characterList[i].CharacterId });	
 			
 			characterList[i] = { Info: info, Data: data, Inventory: inventory };		
 		}
