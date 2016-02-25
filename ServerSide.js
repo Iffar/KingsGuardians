@@ -48,7 +48,7 @@ function CheckBuildingValue(playerInventory, upgrade, amount)
 	if( tier >= 0 && playerInventory.VirtualCurrency["WO"] < amount)
 		return "You don't have enough wood to upgrade this building!"; 
 	
-	var goldCost = Math.ceil(item.VirtualCurrencyPrices["GC"] * upgrade / 2);
+	var goldCost = Math.ceil(amount * upgrade / 2);
 	
 	if(playerInventory.VirtualCurrency["GC"] < goldCost)
 		return "You don't have enough gold to upgrade this building!"; 
@@ -73,7 +73,7 @@ function SubtractCurrencyForBuilding(upgrade, amount, balance)
 	if( tier >= 0 )
 		balance.WO = server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: "WO", Amount: parseInt(amount)}).Balance;		
 	
-	var goldCost = Math.ceil(item.VirtualCurrencyPrices["GC"] * upgrade / 2);
+	var goldCost = Math.ceil(amount * upgrade / 2);
 	
 	balance.GC = server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: "GC", Amount: goldCost}).Balance;		
 	
