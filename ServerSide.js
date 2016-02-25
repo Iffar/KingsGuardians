@@ -30,7 +30,7 @@ function getAllCharacters( playfabID )
 	return characters;
 }
 
-function CheckBuildingValue(upgrade, amount)
+function CheckBuildingValue(playerInventory, upgrade, amount)
 {
 	var tier = parseFloat(upgrade / 10);
 	var multiplier = ( upgrade - Math.floor(tier) * 10);
@@ -615,7 +615,7 @@ handlers.CheckProgress = function ( args )
 		var amount = parseInt(item.VirtualCurrencyPrices["WO"]);
 				
 		// Check materials
-		var errorMsg = CheckBuildingValue(upgrade, amount);
+		var errorMsg = CheckBuildingValue(playerInventory, upgrade, amount);
 		if( errorMsg != "")
 			return { error : errorMsg, serverTime: currTimeSeconds() }; 		
 					
@@ -749,6 +749,7 @@ handlers.Construct = function (args)
 	var itemID = args.ItemID;	
 	var itemInstanceID = args.ItemInstanceID 	// Optional only for upgrading
 	var position = args.Position;				// Where to place the constructed building
+	var rotation = args.Rotation;
 	
 	// Query data
 	var userData = server.GetUserData({ PlayFabId: currentPlayerId }).Data;
@@ -823,7 +824,7 @@ handlers.Construct = function (args)
 		upgrade = parseInt(itemInstance.CustomData.Upgrade) + 1;
 		
 		// CHECK materials
-		var errorMsg = CheckBuildingValue(upgrade, amount);
+		var errorMsg = CheckBuildingValue(playerInventory, upgrade, amount);
 		if( errorMsg != "")
 			return { error : errorMsg, serverTime: currTimeSeconds() }; 		
 					
@@ -873,6 +874,7 @@ handlers.Construct = function (args)
 	var customData = JSON.parse(item.CustomData);	
 	if( typeof position != "undefined")
 	{
+		customData.Rotation = rotation;
 		customData.Position = position;
 		customData.CurrHealth = customData.HP;
 	}	
