@@ -1241,6 +1241,8 @@ handlers.getItems = function(args)
  */
 handlers.battleReward = function(args)
 {
+	var log = "ServerLog - BattleReward handler (1244.)\n *********\n ";
+	
 	var won = args.Won == "True";
 	
 	var goldReward = GOLD_REWARD;
@@ -1260,6 +1262,7 @@ handlers.battleReward = function(args)
 		// if the squad contains this character
 		if( squad.indexOf(characters[i].CharacterId) > -1)
 		{
+			log += " - "+characters[i].CharacterName+"\n";
 			// Add XP
 			var stats = server.GetCharacterStatistics({ PlayFabId: currentPlayerId, CharacterId: characters[i].CharacterId}).CharacterStatistics;
 			stats.XP = stats.XP + xpReward;
@@ -1306,7 +1309,7 @@ handlers.battleReward = function(args)
 		});
 	}
 	
-	return { GoldBalance: goldBalance, GoldReward: goldReward, XPReward: xpReward };
+	return { msg: log, GoldBalance: goldBalance, GoldReward: goldReward, XPReward: xpReward };
 }
 
 
