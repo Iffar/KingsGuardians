@@ -4,7 +4,9 @@ var TIME_TO_PRODUCE_GOLD = 60;			// seconds
 var GOLD_PER_HUT_UPGRADE = 1;			// pieces
 var STORAGE_PER_UPGRADE = 100;			// pieces
 var TIME_TO_MINE = 10 					// seconds
-
+ 
+var GOLD_REWARD = 100; 
+var XP_REWARD = 100;
 
 function currTimeSeconds()
 {
@@ -1232,59 +1234,79 @@ handlers.getItems = function(args)
 }
 
 
-
-// delete the character
+/* This function goes through the player's squad and
+ * - removes all defense cards from every character.
+ * - gives an amount of xp to the squad based on whether or not the player won.
+ * - gives an amount of gold to the player based on whether or not the player won.
+ */
 handlers.battleReward = function(args)
 {
-	var charactersInBattle = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["CharactersForBattle"]}).Data["CharactersForBattle"].Value;
-	charactersInBattle = charactersInBattle.split("|");
+	var won = args.Won == "true";
 	
-	var characters = server.GetAllUsersCharacters({
-						PlayFabId: currentPlayerId
-					});
-		
+	var goldReward = GOLD_REWARD;
+	if( !won ) goldReward /= 2;
+	
+	var xpReward = XP_REWARD;
+	if( !won ) xpReward /= 2;
+	
+	// Get the squad
+	var userdata = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["Squad", "Wins"]});
+	var squad = userdata.Data["Squad"].Value.split("|");
+	var characters = server.GetAllUsersCharacters({ PlayFabId: currentPlayerId });
+	
+	// Iterate through the player characters
 	for (i = 0; i < characters.length; i++) 
 	{
-		var inBattle = false;
-		for(x = 0; x < charactersInBattle.length; x++)
+		// if the squad contains this character
+		if( squad.indexOf(characters[i].CharacterId) > -1)
 		{
-			if(charactersInBattle[x] == characters[i].CharacterId)
-			inBattle = true;
-		}
-	
-		if(inBattle)
-		{
+			// Add XP
+			var stats = server.GetCharacterStatistics({ PlayFabId: currentPlayerId, CharacterId: characters[i].CharacterId}).CharacterStatistics;
+			stats.XP = stats.XP + xpReward;
+			
+			server.UpdateCharacterStatistics({
+				PlayFabId: currentPlayerId,
+				CharacterId: characters[i].CharacterId,
+				CharacterStatistics: stats
+				});
+			
 			// Destroy every defense card			
-			var equipments = server.GetCharacterInventory({
+			var defenseCards = server.GetCharacterInventory({
 					PlayFabId: currentPlayerId,
 					CharacterId: characters[i].CharacterId,
-					CatalogVersion: "EquipmentCards"
+					CatalogVersion: "DefenseCards"
 			}).Inventory;
 			
-			for(j = 0; j < equipments.length; j++)
+			for(j = 0; j < defenseCards.length; j++)
 			{
-				if(equipments[j].ItemClass == "defense")
-				{
-					server.MoveItemToUserFromCharacter({ 
-								PlayFabId: currentPlayerId,
-								CharacterId:characters[i].CharacterId, 
-								ItemInstanceId: equipments[j].ItemInstanceId,
-								});
+				server.MoveItemToUserFromCharacter({ 
+					PlayFabId: currentPlayerId,
+					CharacterId:characters[i].CharacterId, 
+					ItemInstanceId: defenseCards[j].ItemInstanceId,
+					});
 				
-					server.ModifyItemUses({ PlayFabId: currentPlayerId, ItemInstanceId:  equipments[j].ItemInstanceId, UsesToAdd: -1 * equipments[j].RemainingUses });				
-				}
-
+				server.ModifyItemUses({ PlayFabId: currentPlayerId, ItemInstanceId:  defenseCards[j].ItemInstanceId, UsesToAdd: -1 * parseInt(defenseCards[j].RemainingUses) });				
 			}
+			
 		}
 	}
-	
-	server.AddUserVirtualCurrency({
-				PlayFabId: currentPlayerId,
-				VirtualCurrency: "GC",
-				Amount: args.Gold
-	});
 		
-	return { };
+	var goldBalance = server.AddUserVirtualCurrency({
+							PlayFabId: currentPlayerId,
+							VirtualCurrency: "GC",
+							Amount: goldReward
+						}).Balance;
+	
+	if( won )
+	{
+		userdata.Wins = parseInt(userdata.Wins) + 1;
+		server.UpdateUserData({
+			PlayFabId: currentPlayerId,
+			Data: userdata
+		});
+	}
+	
+	return { GoldBalance: goldBalance, GoldReward: goldReward, XPReward: xpReward };
 }
 
 
