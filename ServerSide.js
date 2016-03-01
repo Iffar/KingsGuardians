@@ -1266,9 +1266,8 @@ handlers.battleReward = function(args)
 		if( squad.indexOf(characters[i].CharacterId) > -1)
 		{
 			// Add XP
-			// Add XP
 			var stats = server.GetCharacterStatistics({ PlayFabId: currentPlayerId, CharacterId: characters[i].CharacterId}).CharacterStatistics;
-			var xp = parseInt(stats.XP) + xpReward;
+			var xp = parseInt(stats.XP.Value) + xpReward;
 			
 			server.UpdateCharacterStatistics({
 				PlayFabId: currentPlayerId,
