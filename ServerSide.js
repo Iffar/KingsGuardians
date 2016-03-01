@@ -1254,7 +1254,7 @@ handlers.battleReward = function(args)
 	// Get the squad
 	var userdata = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["Squad", "Wins"]}).Data;
 	var squad = userdata.Squad.Value.split("|");
-	var characters = server.GetAllUsersCharacters({ PlayFabId: currentPlayerId });
+	var characters = server.GetAllUsersCharacters({ PlayFabId: currentPlayerId }).Characters;
 	
 	// Iterate through the player character
 	log += "Iterate through "+ characters.length+" character:\n";
