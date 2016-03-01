@@ -1274,12 +1274,12 @@ handlers.battleReward = function(args)
 			
 			log += " - "+characters[i].CharacterName+ " - XP: "+stats.XP+"+"+xpReward+"=" + xp+"\n";
 			
-		/*	server.UpdateCharacterStatistics({
+			server.UpdateCharacterStatistics({
 				PlayFabId: currentPlayerId,
 				CharacterId: characters[i].CharacterId,
 				CharacterStatistics: {XP : xp}
 				});
-			*/
+			
 			// Destroy every defense card			
 			var defenseCards = server.GetCharacterInventory({
 					PlayFabId: currentPlayerId,
