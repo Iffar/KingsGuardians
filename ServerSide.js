@@ -1260,16 +1260,19 @@ handlers.battleReward = function(args)
 	log += "Iterate through "+ characters.length+" character:\n";
 	for (i = 0; i < characters.length; i++) 
 	{
-		log += " - "+characters[i].CharacterName+ "\n";
+		
 		
 		// if the squad contains this character
 		if( squad.indexOf(characters[i].CharacterId) > -1)
 		{
+			
+			
 			// Add XP
 			var stats = server.GetCharacterStatistics({ PlayFabId: currentPlayerId, CharacterId: characters[i].CharacterId}).CharacterStatistics;
-			var xp = (typeof stats.XP != 'undefined') ? stats.XP.Value + xpReward : xpReward;
+			var xp = (typeof stats.XP != 'undefined') ? stats.XP + xpReward : xpReward;
 			
-			log += "XP: "+stats.XP.Value+"+"+xpReward+"=" + xp+"\n";
+			
+			log += " - "+characters[i].CharacterName+ " - XP: "+stats.XP+"+"+xpReward+"=" + xp+"\n";
 			
 		/*	server.UpdateCharacterStatistics({
 				PlayFabId: currentPlayerId,
