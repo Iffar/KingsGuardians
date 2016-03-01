@@ -1259,25 +1259,20 @@ handlers.battleReward = function(args)
 	// Iterate through the player character
 	log += "Iterate through "+ characters.length+" character:\n";
 	for (i = 0; i < characters.length; i++) 
-	{
-		
-		
+	{		
 		// if the squad contains this character
 		if( squad.indexOf(characters[i].CharacterId) > -1)
-		{
-			
-			
+		{			
 			// Add XP
-			var stats = server.GetCharacterStatistics({ PlayFabId: currentPlayerId, CharacterId: characters[i].CharacterId}).CharacterStatistics;
-			var xp = (typeof stats.XP != 'undefined') ? stats.XP + xpReward : xpReward;
-			
-			
+			var stats = server.GetCharacterData({ PlayFabId: currentPlayerId, CharacterId: characters[i].CharacterId, Keys: ["XP"]}).Data;
+			var xp = (typeof stats.XP != 'undefined' && stats.XP.Value != "") ? parseInt(stats.XP.Value) + xpReward : xpReward;
+						
 			log += " - "+characters[i].CharacterName+ " - XP: "+stats.XP+"+"+xpReward+"=" + xp+"\n";
 			
-			server.UpdateCharacterStatistics({
+			server.UpdateCharacterData({
 				PlayFabId: currentPlayerId,
 				CharacterId: characters[i].CharacterId,
-				CharacterStatistics: {XP : xp}
+				Data: {XP : xp}
 				});
 			
 			// Destroy every defense card			
