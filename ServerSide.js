@@ -1251,7 +1251,7 @@ handlers.battleReward = function(args)
 	
 	// Get the squad
 	var userdata = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["Squad", "Wins"]}).Data;
-	var squad = userdata.Squad.split("|");
+	var squad = userdata.Squad.Value.split("|");
 	var characters = server.GetAllUsersCharacters({ PlayFabId: currentPlayerId });
 	
 	// Iterate through the player characters
@@ -1299,8 +1299,8 @@ handlers.battleReward = function(args)
 	
 	if( won )
 	{
-		var wins = (typeof userdata.Wins != 'undefined' && userdata.Wins != "") ? parseInt(userdata.Wins) + 1 : 1;
-		userdata.Wins = wins;
+		var wins = (typeof userdata.Wins != 'undefined' && userdata.Wins.Value != "") ? parseInt(userdata.Wins.Value) + 1 : 1;
+		userdata.Wins.Value = wins;
 		server.UpdateUserData({
 			PlayFabId: currentPlayerId,
 			Data: userdata
