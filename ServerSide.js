@@ -1249,10 +1249,10 @@ handlers.battleReward = function(args)
 	if( !won ) goldReward = floor(goldReward / 2);
 	
 	var xpReward = XP_REWARD;
-	if( !won ) xpReward = floor(xpReward / 2);
+	if( !won ) xpReward = Math.floor(xpReward / 2);
 	
 	// Get the squad
-	var userdata = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["Squad", "Wins"]}).Data;
+	var userdata = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["Squad", "Wins", "XP"]}).Data;
 	var squad = userdata.Squad.Value.split("|");
 	var characters = server.GetAllUsersCharacters({ PlayFabId: currentPlayerId }).Characters;
 	
@@ -1267,7 +1267,7 @@ handlers.battleReward = function(args)
 		{
 			// Add XP
 			var stats = server.GetCharacterStatistics({ PlayFabId: currentPlayerId, CharacterId: characters[i].CharacterId}).CharacterStatistics;
-			var xp = (typeof stats.XP != 'undefined' && stats.XP.Value != "") ? parseInt(stats.XP.Value) + xpReward : xpReward;
+			var xp = (typeof stats.XP != 'undefined') ? stats.XP.Value + xpReward : xpReward;
 			
 			server.UpdateCharacterStatistics({
 				PlayFabId: currentPlayerId,
@@ -1305,9 +1305,13 @@ handlers.battleReward = function(args)
 	if( won )
 	{
 		var wins = (typeof userdata.Wins != 'undefined' && userdata.Wins.Value != "") ? parseInt(userdata.Wins.Value) + 1 : 1;
+		var xp =  (typeof userdata.XP != 'undefined' && userdata.XP.Value != "") ? parseInt(userdata.XP.Value) + xpReward : xpReward;
 		server.UpdateUserData({
 			PlayFabId: currentPlayerId,
-			Data: {Wins : wins},
+			Data: {
+				Wins : wins,
+				XP : xp
+				},
 		});
 	}
 	
