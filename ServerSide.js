@@ -1250,8 +1250,8 @@ handlers.battleReward = function(args)
 	if( !won ) xpReward /= 2;
 	
 	// Get the squad
-	var userdata = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["Squad", "Wins"]});
-	var squad = userdata.Data["Squad"].Value.split("|");
+	var userdata = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["Squad", "Wins"]}).Data;
+	var squad = userdata.Squad.split("|");
 	var characters = server.GetAllUsersCharacters({ PlayFabId: currentPlayerId });
 	
 	// Iterate through the player characters
