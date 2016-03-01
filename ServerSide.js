@@ -1300,10 +1300,9 @@ handlers.battleReward = function(args)
 	if( won )
 	{
 		var wins = (typeof userdata.Wins != 'undefined' && userdata.Wins.Value != "") ? parseInt(userdata.Wins.Value) + 1 : 1;
-		userdata.Wins.Value = wins;
 		server.UpdateUserData({
 			PlayFabId: currentPlayerId,
-			Data: userdata
+			Data: {Wins : wins},
 		});
 	}
 	
