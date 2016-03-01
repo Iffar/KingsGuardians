@@ -1259,10 +1259,12 @@ handlers.battleReward = function(args)
 	// Iterate through the player characters
 	for (i = 0; i < characters.length; i++) 
 	{
+		log += " - "+characters[i].CharacterName+ " squad? "+ squad.indexOf(characters[i].CharacterId) +"\n";
+		
 		// if the squad contains this character
 		if( squad.indexOf(characters[i].CharacterId) > -1)
 		{
-			log += " - "+characters[i].CharacterName+"\n";
+			// Add XP
 			// Add XP
 			var stats = server.GetCharacterStatistics({ PlayFabId: currentPlayerId, CharacterId: characters[i].CharacterId}).CharacterStatistics;
 			stats.XP = stats.XP + xpReward;
