@@ -1241,7 +1241,7 @@ handlers.getItems = function(args)
  */
 handlers.battleReward = function(args)
 {
-	var won = args.Won == "true";
+	var won = args.Won == "True";
 	
 	var goldReward = GOLD_REWARD;
 	if( !won ) goldReward /= 2;
