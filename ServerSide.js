@@ -1246,10 +1246,10 @@ handlers.battleReward = function(args)
 	var won = args.Won == "True";
 	
 	var goldReward = GOLD_REWARD;
-	if( !won ) goldReward /= 2;
+	if( !won ) goldReward = floor(goldReward / 2);
 	
 	var xpReward = XP_REWARD;
-	if( !won ) xpReward /= 2;
+	if( !won ) xpReward = floor(xpReward / 2);
 	
 	// Get the squad
 	var userdata = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["Squad", "Wins"]}).Data;
@@ -1268,12 +1268,12 @@ handlers.battleReward = function(args)
 			// Add XP
 			// Add XP
 			var stats = server.GetCharacterStatistics({ PlayFabId: currentPlayerId, CharacterId: characters[i].CharacterId}).CharacterStatistics;
-			stats.XP = stats.XP + xpReward;
+			var xp = parseInt(stats.XP) + xpReward;
 			
 			server.UpdateCharacterStatistics({
 				PlayFabId: currentPlayerId,
 				CharacterId: characters[i].CharacterId,
-				CharacterStatistics: stats
+				CharacterStatistics: {XP : xp}
 				});
 			
 			// Destroy every defense card			
