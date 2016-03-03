@@ -1267,8 +1267,6 @@ handlers.battleReward = function(args)
 			var stats = server.GetCharacterData({ PlayFabId: currentPlayerId, CharacterId: characters[i].CharacterId, Keys: ["XP"]}).Data;
 			var xp = (typeof stats.XP != 'undefined' && stats.XP.Value != "") ? parseInt(stats.XP.Value) + xpReward : xpReward;
 						
-			log += " - "+characters[i].CharacterName+ " - XP: "+stats.XP+"+"+xpReward+"=" + xp+"\n";
-			
 			server.UpdateCharacterData({
 				PlayFabId: currentPlayerId,
 				CharacterId: characters[i].CharacterId,
@@ -1316,6 +1314,42 @@ handlers.battleReward = function(args)
 	}
 	
 	return { msg: log, GoldBalance: goldBalance, GoldReward: goldReward, XPReward: xpReward };
+}
+
+
+handlers.raidReward = function(args)
+{
+	var log = "ServerLog - Raid Reward handler (1322.)\n *********\n ";
+	
+	var enemyPlayerID = args.EnemyPlayerID;
+	var currencies = args.Currencies.split("|");
+	var cards = args.Cards.split("|");
+	
+	var enemyInventory = server.GetUserInventory({ PlayFabId: enemyPlayerID});
+	var inventory = enemyInventory.Inventory;
+	var materials = enemyInventory.VirtualCurrency;
+	
+	// Remove currency
+	for(var i = 0; i < currencies.length; i++)
+	{
+		var material = currencies[i].split(":");
+		var amount = parseInt(material[1]);
+		
+		if( materials[material[0]]] < amount )
+			amount = materials[material[0]]];
+	
+		server.SubtractUserVirtualCurrency({ PlayFabId: enemyPlayerID, VirtualCurrency: material[0], Amount: amount });
+		server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: material[0], Amount: amount });
+	}
+		
+	// Transfer card
+	for(var j = 0; j < cards.length; j++)
+	{
+		server.RevokeInventoryItem({PlayFabId: enemyPlayerID, ItemInstanceId: cards[j]});
+		server.GrantItemsToUser({PlayFabId: currentPlayerId, ItemIds: [cards[j]]});
+	}
+	
+	return { msg: log };
 }
 
 
