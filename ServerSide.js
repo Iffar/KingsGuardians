@@ -1108,7 +1108,7 @@ handlers.Craft = function (args)
 		balance.GC = server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: "GC", Amount: price}).Balance;		
 	
 	var data = "";
-	var finishTime = parseFloat(item.VirtualCurrencyPrices.T);	
+	var finishTime = parseFloat(item.VirtualCurrencyPrices["0T"]);	
 	
 	if( cnt >= 0 )
 	{
