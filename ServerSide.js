@@ -1335,7 +1335,7 @@ handlers.raidReward = function(args)
 		var material = currencies[i].split(":");
 		var amount = parseInt(material[1]);
 		
-		if( materials[material[0]]] < amount )
+		if( materials[material[0]] < amount )
 			amount = materials[material[0]]];
 	
 		server.SubtractUserVirtualCurrency({ PlayFabId: enemyPlayerID, VirtualCurrency: material[0], Amount: amount });
