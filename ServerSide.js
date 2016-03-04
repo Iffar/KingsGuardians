@@ -607,7 +607,7 @@ handlers.CheckProgress = function ( args )
 				building = playerInventory.Inventory[cnt];				
 		}	
 		if( typeof buildingInstance == 'undefined' )
-			return { msg: log, error : "You don't own this item ("+buildingInstanceID+","+playerInventory.Inventory.length+")!", serverTime: currTimeSeconds()  }; 		
+			return { msg: log, error : "You don't own this item ("+details[0]+","+playerInventory.Inventory.length+")!", serverTime: currTimeSeconds()  }; 		
 		
 		var currHP = parseInt(building.CustomData.CurrHealth);
 		var maxHP = parseInt(building.CustomData.HP) * (parseInt(building.CustomData.Upgrade)+1);
