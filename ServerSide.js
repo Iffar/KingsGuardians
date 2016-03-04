@@ -645,7 +645,7 @@ handlers.CheckProgress = function ( args )
 		if(damage == 0)
 			repair.splice(i, 1);
 		else
-			repair[i] = details[0] +","+currTimeSeconds()+","+details[2];		
+			repair[i] = details[0] +","+currTimeSeconds()+","+details[2]+","+damage;		
 	}		
 	var repairString = (repair != "" ) ? repair.join("|") : ""; 
 	
