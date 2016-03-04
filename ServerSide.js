@@ -609,18 +609,18 @@ handlers.CheckProgress = function ( args )
 		if( typeof buildingInstance == 'undefined' )
 			return { msg: log, error : "You don't own this item ("+details[0]+","+playerInventory.Inventory.length+")!", serverTime: currTimeSeconds()  }; 		
 		
-		var currHP = parseInt(building.CustomData.CurrHealth);
-		var maxHP = parseInt(building.CustomData.HP) * (parseInt(building.CustomData.Upgrade)+1);
-		
+		var damage = parseInt(building.CustomData.DamageTaken);
+					
 		// Repaired amount until the last check
-		var repairedAmount = (int)((currTimeSeconds() - parseFloat(details[1])) / TIME_TO_REPAIR_ONE_HEALTH); 
-		var remainingHP = maxHP - currHP;
-		if(repairedAmount > remainingHP)
-			repairedAmount = remainingHP;
-		
+		var repairAmount = (int)((currTimeSeconds() - parseFloat(details[1])) / TIME_TO_REPAIR_ONE_HEALTH); 
+		damage -= repairAmount;
+		if(damage < 0)
+			damage = 0;	
+			
 		// Subtract Materials
 		var upgrade = parseInt(building.CustomData.Upgrade);
-		var amount = parseInt(item.VirtualCurrencyPrices["WO"]);
+		var percentage = parseInt(building.CustomData.HP) * upgrade;
+		var amount = Math.floor(parseInt(item.VirtualCurrencyPrices["WO"]) * percentage);
 				
 		// Check materials
 		var errorMsg = CheckBuildingValue(playerInventory, upgrade, amount);
@@ -631,12 +631,11 @@ handlers.CheckProgress = function ( args )
 		balance = SubtractCurrencyForBuilding(upgrade, amount, balance);
 			
 		// Update building hp	
-		currHP += repairedAmount;
-		building.CustomData.CurrHealth = currHP
+		building.CustomData.DamageTaken = damage
 			
 		server.UpdateUserInventoryItemCustomData({ PlayFabId: currentPlayerId, ItemInstanceId: details[0], Data: building.CustomData});
 		
-		if(curHP == maxHP)
+		if(damage == 0)
 			repair.splice(i, 1);
 		else
 			repair[i] = details[0] +","+currTimeSeconds();		
