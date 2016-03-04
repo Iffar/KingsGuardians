@@ -566,7 +566,7 @@ handlers.CheckProgress = function ( args )
 				// Check if the progress finished
 				if(info [0] <= currTimeSeconds())
 				{					
-					log += "Add item: " + info;		
+					log += "\n server.GrantItemsToUser({ PlayFabId: "+currentPlayerId+", ItemIds: "+[info[1]]+" }).";		
 					server.GrantItemsToUser({ PlayFabId: currentPlayerId, ItemIds: [info[1]] });
 					
 					progresses.splice(j, 1);
