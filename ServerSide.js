@@ -1325,6 +1325,8 @@ handlers.raidReward = function(args)
 	var currencies = args.Currencies.split("|");
 	var cards = args.Cards.split("|");
 	
+	log += "EnemyPlayerID: " + args.EnemyPlayerID + "\n - Currencies: " +args.Currencies+"\n - Cards: "+args.Cards+"\n\n";
+	
 	var enemyInventory = server.GetUserInventory({ PlayFabId: enemyPlayerID});
 	var inventory = enemyInventory.Inventory;
 	var materials = enemyInventory.VirtualCurrency;
@@ -1346,8 +1348,8 @@ handlers.raidReward = function(args)
 	// Transfer card
 	for(var j = 0; j < cards.length; j++)
 	{
-		server.RevokeInventoryItem({PlayFabId: enemyPlayerID, ItemInstanceId: cards[j]});
-		server.GrantItemsToUser({PlayFabId: currentPlayerId, ItemIds: [cards[j]]});
+	//	server.RevokeInventoryItem({PlayFabId: enemyPlayerID, ItemInstanceId: cards[j]});
+	//	server.GrantItemsToUser({PlayFabId: currentPlayerId, ItemIds: [cards[j]]});
 	}
 	
 	return { msg: log };
