@@ -1349,14 +1349,19 @@ handlers.raidReward = function(args)
 	}
 		
 	// Transfer card
+	var itemIds = [];
 	for(var j = 0; j < cards.length; j++)
 	{
 		if( cards[j] != "")
 		{
-			server.RevokeInventoryItem({PlayFabId: enemyPlayerID, ItemInstanceId: cards[j]});
-			server.GrantItemsToUser({PlayFabId: currentPlayerId, ItemIds: [cards[j]]});
+			var info = cards[j].split(":");
+			server.RevokeInventoryItem({PlayFabId: enemyPlayerID, ItemInstanceId: info[0]});
+			itemIds[itemIds.length] = info[1];
 		}
 	}
+	
+	if( itemIds.length > 0)
+		server.GrantItemsToUser({PlayFabId: currentPlayerId, ItemIds: itemIds});
 	
 	return { msg: log };
 }
