@@ -365,7 +365,7 @@ handlers.buyCharacter = function(args)
 handlers.CheckProgress = function ( args )
 {
 	var log = "ServerLog - CheckProgress handler (347.)\n *********\n";
-	var userData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["Construct", "Mine", "Craft", "Repair", "GoldGeneration", "GoldStorage", "LastGoldTime"]}).Data;  // ADD more!
+	var userData = server.GetUserData({ PlayFabId: currentPlayerId, Keys: ["Construct", "Mine", "Craft", "Repair", "GoldGeneration", "GoldStorage", "LastGoldTime", "Wins", "Loses"]}).Data;  // ADD more!
 	var needUpdate = false;		
 		
 	var playerInventory = server.GetUserInventory({ PlayFabId: currentPlayerId, CatalogVersion: "Buildings" });	
@@ -376,6 +376,11 @@ handlers.CheckProgress = function ( args )
 	var goldGeneration = ((typeof userData.GoldGeneration != 'undefined') && (typeof userData.GoldGeneration.Value != 'undefined') && userData.GoldGeneration.Value != "") ? userData.GoldGeneration.Value.split('|') : [];
 	var goldStorage = ((typeof userData.GoldStorage != 'undefined') && (typeof userData.GoldStorage.Value != 'undefined') && userData.GoldStorage.Value != "") ? userData.GoldStorage.Value.split('|') : [];
 	var lastGoldTime = ((typeof userData.LastGoldTime != 'undefined') && (typeof userData.LastGoldTime.Value != 'undefined') && userData.LastGoldTime.Value != "") ? parseFloat(userData.LastGoldTime.Value) : currTimeSeconds() - TIME_TO_PRODUCE_GOLD;
+	
+	var wins = ((typeof userData.Wins != 'undefined') && (typeof userData.Wins.Value != 'undefined') && userData.Wins.Value != "") ? parseInt(userData.Wins.Value) : 0;
+	var loses = ((typeof userData.Loses != 'undefined') && (typeof userData.Loses.Value != 'undefined') && userData.Loses.Value != "") ? parseInt(userData.Loses.Value) : 0;
+	var ratio = wins / (loses+wins);
+	
 	
 	if( lastGoldTime + TIME_TO_PRODUCE_GOLD <= currTimeSeconds())
 	{
@@ -393,6 +398,8 @@ handlers.CheckProgress = function ( args )
 			storage += (1+parseInt(data[1])) * STORAGE_PER_UPGRADE;
 		}		
 		amount = storage - balance.GC;
+		
+		amount = Math.floor(ratio * amount);
 		
 		if( amount > 0)
 		{
@@ -1244,7 +1251,7 @@ handlers.battleReward = function(args)
 	var won = args.Won == "True";
 	
 	var goldReward = GOLD_REWARD;
-	if( !won ) goldReward = floor(goldReward / 2);
+	if( !won ) goldReward = Math.floor(goldReward / 2);
 	
 	var xpReward = XP_REWARD;
 	if( !won ) xpReward = Math.floor(xpReward / 2);
