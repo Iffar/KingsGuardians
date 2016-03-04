@@ -621,7 +621,7 @@ handlers.CheckProgress = function ( args )
 		// Subtract Materials
 		var upgrade = parseInt(building.CustomData.Upgrade);
 		var percentage = parseInt(building.CustomData.HP) * upgrade;
-		var amount = Math.floor(parseInt(building.VirtualCurrencyPrices["WO"]) * percentage);
+		var amount = Math.floor(parseInt(details[2]) * percentage);
 				
 		// Check materials
 		var errorMsg = CheckBuildingValue(playerInventory, upgrade, amount);
@@ -718,7 +718,22 @@ handlers.Repair = function (args)
 
 	if( typeof buildingInstance == 'undefined' )
 		return { msg: log, error : "You don't own this item ("+buildingInstanceID+","+playerInventory.Inventory.length+")!", serverTime: currTimeSeconds()  }; 
-						
+		
+	var catalogItem;
+	var itemList = server.GetCatalogItems({ CatalogVersion: "Buildings" }).Catalog;
+	for(i = 0; i < itemList.length; i++)
+	{
+		if(itemList[i].ItemId == buildingInstance.ItemId)
+		{
+			catalogItem = itemList[i];
+			break;
+		}
+	}	
+	// If there is no such item in the catalog, throw an error.
+	if( typeof catalogItem == 'undefined' )
+		return { error : "Can't find item ("+buildingInstance.ItemId+") in the Buildings catalog!", serverTime: currTimeSeconds()  }; 
+
+		
 	// Check missing & max hp
 	var maxHP = parseInt(buildingInstance.CustomData.HP) * parseInt(buildingInstance.CustomData.Upgrade);
 	var currHP = parseInt(buildingInstance.CustomData.CurrHealth);	
@@ -727,12 +742,12 @@ handlers.Repair = function (args)
 	
 	if( repair != "")
 		repair += "|";
-	repair += buildingInstanceID + ","+currTimeSeconds();
+	repair += buildingInstanceID + ","+currTimeSeconds()+","+catalogItem.VirtualCurrencyPrices["WO"];
 	
 	// update repair data
 	server.UpdateUserData({
-				PlayFabId: currentPlayerId,
-				Data: {Repair : repair},
+		PlayFabId: currentPlayerId,
+		Data: {Repair : repair},
 	});
 		
 	// Return the informations
