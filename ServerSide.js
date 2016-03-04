@@ -603,11 +603,11 @@ handlers.CheckProgress = function ( args )
 		var building;
 		for(cnt = 0; cnt < playerInventory.Inventory.length; cnt++)
 		{
-			log+= "\n"+playerInventory.Inventory[cnt].ItemInstanceId+" == "+details[0]+"\n";
+			log+= "\n'"+playerInventory.Inventory[cnt].ItemInstanceId+"' == '"+details[0]+ "' ---> " +(playerInventory.Inventory[cnt].ItemInstanceId == details[0])+"\n";
 			if(playerInventory.Inventory[cnt].ItemInstanceId == details[0])
 				building = playerInventory.Inventory[cnt];				
 		}	
-		if( typeof buildingInstance == 'undefined' )
+		if( typeof building == 'undefined' )
 			return { msg: log, error : "You don't own this item ("+details[0]+","+playerInventory.Inventory.length+")!", serverTime: currTimeSeconds()  }; 		
 		
 		var damage = parseInt(building.CustomData.DamageTaken);
