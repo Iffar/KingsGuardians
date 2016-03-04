@@ -1322,10 +1322,11 @@ handlers.raidReward = function(args)
 	var enemyPlayerID = args.EnemyPlayerID;
 	var currencies = args.Currencies.split("|");
 	var cards = args.Cards.split("|");
+	var buildings = args.Buildings.split("|");
 	
 	log += "EnemyPlayerID: " + args.EnemyPlayerID + "\n - Currencies: " +args.Currencies+"\n - Cards: "+args.Cards+"\n\n";
 	
-	var enemyInventory = server.GetUserInventory({ PlayFabId: enemyPlayerID});
+	var enemyInventory = server.GetUserInventory({ PlayFabId: enemyPlayerID });
 	var inventory = enemyInventory.Inventory;
 	var materials = enemyInventory.VirtualCurrency;
 	
@@ -1344,8 +1345,7 @@ handlers.raidReward = function(args)
 			server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: material[0], Amount: amount });
 		}
 	
-		log += "Amount of "+ material[0] + ": " + amount + "("+material[1]+") target player has: " + materials[material[0]];
-	
+		log += "Amount of "+ material[0] + ": " + amount + "("+material[1]+") target player has: " + materials[material[0]];	
 	}
 		
 	// Transfer card
@@ -1358,6 +1358,23 @@ handlers.raidReward = function(args)
 			server.RevokeInventoryItem({PlayFabId: enemyPlayerID, ItemInstanceId: info[0]});
 			itemIds[itemIds.length] = info[1];
 		}
+	}
+	
+	// Update building health
+	var buildingDamages = {}
+	for( k = 0; k < buildings.length; k++)
+	{
+		var info = buildings[k].split(":");
+		buildingDamages[info[0]] = parseInt(info[1]);
+	}	
+	for( cnt = 0; cnt < inventory.length; cnt++)
+	{
+		if( typeof buildingDamages[inventory[cnt].ItemInstanceId] != 'undefined' )
+			server.UpdateUserInventoryItemCustomData({
+				PlayFabId: enemyPlayerID, 
+				ItemInstanceId: inventory[cnt].ItemInstanceId,
+				Data: { DamageTaken: buildingDamages[inventory[cnt].ItemInstanceId] }
+				});				
 	}
 	
 	if( itemIds.length > 0)
