@@ -697,8 +697,7 @@ handlers.CheckProgress = function ( args )
  */
 handlers.Repair = function (args)
 {
-	var log = "ServerLog - Repair handler (662.)\n *********\n";
-	
+	var log = "ServerLog - Repair handler (662.)\n *********\n";	
 	var buildingInstanceID = args.BuildingInstanceID;
 	
 	var playerInventory = server.GetUserInventory({ PlayFabId: currentPlayerId, CatalogVersion: "Buildings" });	
@@ -742,14 +741,13 @@ handlers.Repair = function (args)
 
 		
 	// Check missing & max hp
-	var maxHP = parseInt(buildingInstance.CustomData.HP) * parseInt(buildingInstance.CustomData.Upgrade);
-	var currHP = parseInt(buildingInstance.CustomData.CurrHealth);	
-	if( currHP == maxHP)
+	var damage = parseInt(buildingInstance.CustomData.DamageTaken);	
+	if( damage == 0)
 		return { msg: log, error : "This building isn't damaged!", serverTime: currTimeSeconds()  }; 
 	
 	if( repair != "")
 		repair += "|";
-	repair += buildingInstanceID + ","+currTimeSeconds()+","+catalogItem.VirtualCurrencyPrices["WO"];
+	repair += buildingInstanceID + ","+currTimeSeconds()+","+catalogItem.VirtualCurrencyPrices["WO"]+","+damage;
 	
 	// update repair data
 	server.UpdateUserData({
