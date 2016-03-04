@@ -603,6 +603,7 @@ handlers.CheckProgress = function ( args )
 		var building;
 		for(cnt = 0; cnt < playerInventory.Inventory.length; cnt++)
 		{
+			log+= "\n"+playerInventory.Inventory[cnt].ItemInstanceId+" == "+details[0]+"\n";
 			if(playerInventory.Inventory[cnt].ItemInstanceId == details[0])
 				building = playerInventory.Inventory[cnt];				
 		}	
@@ -631,8 +632,7 @@ handlers.CheckProgress = function ( args )
 		balance = SubtractCurrencyForBuilding(upgrade, amount, balance);
 			
 		// Update building hp	
-		building.CustomData.DamageTaken = damage
-			
+		building.CustomData.DamageTaken = damage			
 		server.UpdateUserInventoryItemCustomData({ PlayFabId: currentPlayerId, ItemInstanceId: details[0], Data: building.CustomData});
 		
 		if(damage == 0)
