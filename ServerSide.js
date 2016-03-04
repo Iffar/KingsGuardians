@@ -713,7 +713,7 @@ handlers.Repair = function (args)
 	if((typeof playerInventory.VirtualCurrency["0B"] < 1))
 		return { error : "You don't have any worker!", serverTime: currTimeSeconds() };
 	if(underConstruction.length + repair.length + 1 > playerInventory.VirtualCurrency["0B"])
-		return { error : "Not enough worker (has "+ playerInventory.VirtualCurrency["0B"] + " and needs "+(underConstruction.length + 1)+" )!", serverTime: currTimeSeconds() };
+		return { error : "Not enough worker (has "+ playerInventory.VirtualCurrency["0B"] + " and needs "+(underConstruction.length + repair.length + 1)+" )!", serverTime: currTimeSeconds() };
 		
 	// Get building
 	var buildingInstance;
