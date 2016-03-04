@@ -1342,8 +1342,8 @@ handlers.raidReward = function(args)
 		
 		if( amount > 0 )
 		{
-			//	server.SubtractUserVirtualCurrency({ PlayFabId: enemyPlayerID, VirtualCurrency: material[0], Amount: amount });
-			//	server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: material[0], Amount: amount });
+			server.SubtractUserVirtualCurrency({ PlayFabId: enemyPlayerID, VirtualCurrency: material[0], Amount: amount });
+			server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: material[0], Amount: amount });
 		}
 	
 		log += "Amount of "+ material[0] + ": " + amount + "("+material[1]+") target player has: " + materials[material[0]];
@@ -1353,8 +1353,11 @@ handlers.raidReward = function(args)
 	// Transfer card
 	for(var j = 0; j < cards.length; j++)
 	{
-	//	server.RevokeInventoryItem({PlayFabId: enemyPlayerID, ItemInstanceId: cards[j]});
-	//	server.GrantItemsToUser({PlayFabId: currentPlayerId, ItemIds: [cards[j]]});
+		if( cards[j] != "")
+		{
+			server.RevokeInventoryItem({PlayFabId: enemyPlayerID, ItemInstanceId: cards[j]});
+			server.GrantItemsToUser({PlayFabId: currentPlayerId, ItemIds: [cards[j]]});
+		}
 	}
 	
 	return { msg: log };
