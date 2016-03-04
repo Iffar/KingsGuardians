@@ -1339,10 +1339,15 @@ handlers.raidReward = function(args)
 		
 		if( materials[material[0]] < amount )
 			amount = materials[material[0]];
+		
+		if( amount > 0 )
+		{
+			//	server.SubtractUserVirtualCurrency({ PlayFabId: enemyPlayerID, VirtualCurrency: material[0], Amount: amount });
+			//	server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: material[0], Amount: amount });
+		}
 	
-		log += "Amount of "+ material[0] + ": " + amount + "("+material[1]+")";
-	//	server.SubtractUserVirtualCurrency({ PlayFabId: enemyPlayerID, VirtualCurrency: material[0], Amount: amount });
-	//	server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: material[0], Amount: amount });
+		log += "Amount of "+ material[0] + ": " + amount + "("+material[1]+") target player has: " + materials[material[0]];
+	
 	}
 		
 	// Transfer card
