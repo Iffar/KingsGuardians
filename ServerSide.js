@@ -1340,7 +1340,7 @@ handlers.raidReward = function(args)
 		if( materials[material[0]] < amount )
 			amount = materials[material[0]];
 	
-		log += "Amount of "+ material[0] + ": " + amount;
+		log += "Amount of "+ material[0] + ": " + amount + "("+material[1]+")";
 	//	server.SubtractUserVirtualCurrency({ PlayFabId: enemyPlayerID, VirtualCurrency: material[0], Amount: amount });
 	//	server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: material[0], Amount: amount });
 	}
