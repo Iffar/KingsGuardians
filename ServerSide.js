@@ -566,8 +566,9 @@ handlers.CheckProgress = function ( args )
 				// Check if the progress finished
 				if(info [0] <= currTimeSeconds())
 				{					
+					log += "Add item: " + info;
 					items = [];
-					items[items.length] = info[2]; 					
+					items[items.length] = info[1]; 					
 					server.GrantItemsToUser({ PlayFabId: currentPlayerId, ItemIds: items });
 					
 					progresses.splice(j, 1);
@@ -1098,8 +1099,7 @@ handlers.Craft = function (args)
 	
 	// Check prices
 	var balance = playerInventory.VirtualCurrency;
-	var pieces = parseInt(buildingInstance.CustomData.Upgrade)+1;
-	var price = pieces * parseInt(item.VirtualCurrencyPrices.GC);
+	var price = item.VirtualCurrencyPrices.GC;
 	if(balance.GC < price)
 		return { error : "You don't have enough gold!", serverTime: currTimeSeconds()  }; 		
 	
@@ -1118,7 +1118,7 @@ handlers.Craft = function (args)
 			var progresses = buildingData[1].split("-");
 			var last = progresses[progresses.length-1].split(",");						
 			finishTime += parseFloat(last[0]);
-			progresses[progresses.length] = finishTime+","+pieces+","+itemID;
+			progresses[progresses.length] = finishTime+","+itemID;
 			
 			buildingData[1] = progresses.join("-");
 		}			
@@ -1126,7 +1126,7 @@ handlers.Craft = function (args)
 		data = craftProgresses.join('|');
 	}
 	else
-		data = buildingInstanceID+":"+(parseFloat(finishTime)+currTimeSeconds())+","+pieces+","+itemID;
+		data = buildingInstanceID+":"+(parseFloat(finishTime)+currTimeSeconds())+","+itemID;
 	
 	server.UpdateUserData({			
 		PlayFabId: currentPlayerId,
@@ -1135,8 +1135,8 @@ handlers.Craft = function (args)
 	
 	
 	// CRAFT DATA: 
-	//		[BuildingInstanceID] : [finish],[amount],[itemID] - [finish],[amount],[itemID] - [finish],[amount],[itemID] |
-	// 		[BuildingInstanceID] : [finish],[amount],[itemID] - [finish],[amount],[itemID] - [finish],[amount],[itemID] |
+	//		[BuildingInstanceID] : [finish],[itemID] - [finish],[itemID] - [finish],[itemID] |
+	// 		[BuildingInstanceID] : [finish],[itemID] - [finish],[itemID] - [finish],[itemID] |
 		
 	return { msg : log, UserDataCraft: data, Balance: balance, serverTime: currTimeSeconds() };
 }
