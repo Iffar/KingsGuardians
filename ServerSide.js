@@ -36,7 +36,7 @@ function CheckBuildingValue(playerInventory, upgrade, amount)
 {
 	var tier = parseFloat(upgrade / 10);
 	var multiplier = ( upgrade - Math.floor(tier) * 10);
-	if(multiplier < 0)
+	if(multiplier <= 0)
 		multiplier = 1;	
 	var amount = amount * multiplier;
 	
@@ -51,6 +51,8 @@ function CheckBuildingValue(playerInventory, upgrade, amount)
 		return "You don't have enough wood to upgrade this building!"; 
 	
 	var goldCost = Math.ceil(amount * upgrade / 2);
+	if(goldCost <= 0)
+		goldCost = 1;	
 	
 	if(playerInventory.VirtualCurrency["GC"] < goldCost)
 		return "You don't have enough gold to upgrade this building!"; 
@@ -62,7 +64,7 @@ function SubtractCurrencyForBuilding(upgrade, amount, balance)
 {
 	var tier = parseFloat(upgrade / 10);
 	var multiplier = ( upgrade - Math.floor(tier) * 10);
-	if(multiplier < 0)
+	if(multiplier <= 0)
 		multiplier = 1;	
 	var amount = amount * multiplier;
 	
@@ -76,6 +78,8 @@ function SubtractCurrencyForBuilding(upgrade, amount, balance)
 		balance.WO = server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: "WO", Amount: parseInt(amount)}).Balance;		
 	
 	var goldCost = Math.ceil(amount * upgrade / 2);
+	if(goldCost <= 0)
+		goldCost = 1;	
 	
 	balance.GC = server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: "GC", Amount: goldCost}).Balance;		
 	
