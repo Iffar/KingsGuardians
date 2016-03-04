@@ -613,7 +613,7 @@ handlers.CheckProgress = function ( args )
 		var damage = parseInt(building.CustomData.DamageTaken);
 					
 		// Repaired amount until the last check
-		var repairAmount = (int)((currTimeSeconds() - parseFloat(details[1])) / TIME_TO_REPAIR_ONE_HEALTH); 
+		var repairAmount = Math.round((currTimeSeconds() - parseFloat(details[1])) / TIME_TO_REPAIR_ONE_HEALTH); 
 		damage -= repairAmount;
 		if(damage < 0)
 			damage = 0;	
