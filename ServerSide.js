@@ -620,9 +620,12 @@ handlers.CheckProgress = function ( args )
 			
 		// Subtract Materials
 		var upgrade = parseInt(building.CustomData.Upgrade);
-		var percentage = parseInt(building.CustomData.HP) * upgrade;
+		var percentage = repairAmount / parseInt(building.CustomData.HP) * upgrade;
 		var amount = Math.floor(parseInt(details[2]) * percentage);
 				
+		if( amount <= 0 )
+			amount = 1;
+		
 		// Check materials
 		var errorMsg = CheckBuildingValue(playerInventory, upgrade, amount);
 		if( errorMsg != "")
