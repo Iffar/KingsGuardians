@@ -303,7 +303,7 @@ handlers.equipItem = function(args)
 
 /* Update character stats
  */
-handlers.updateCharacterStats = function(args)
+handlers.updateCharacterData = function(args)
 {
 	server.UpdateCharacterData({
 		PlayFabId: currentPlayerId,
@@ -418,30 +418,29 @@ handlers.CheckProgress = function ( args )
 	{
 		if(construct[i] != "")
 		{
-			var progress = construct[i].split(':');		// 0: Building Instance ID, 1: info
-			var info = progress[1].split(',');			// 0: finish time, 1: itemClass, 2: next upgrade
+			var info = construct[i].split(',');			// 0: Building Instance, 1: finish time, 2: itemClass, 3: next upgrade
 						
 			// Check if the progress finished
-			if(info[0] <= currTimeSeconds())
+			if(info[1] <= currTimeSeconds())
 			{
 				// Increase Gold produce
-				if( info[1] == "Hut")
+				if( info[2] == "Hut")
 				{
 					var addNew = true;
 					for( cnt = 0; cnt < goldGeneration.length; cnt++)
 					{
 						var data = goldGeneration[i].split(':');
-						if( data[0] == progress[0])
+						if( data[0] == info[0])
 						{
-							goldGeneration[i] = data[0] +":"+info[2];
+							goldGeneration[i] = data[0] +":"+info[3];
 							addNew = false;
 						}
 					}
 					if( addNew )
-						goldGeneration[goldGeneration.length] = progress[0] +":"+info[2];
+						goldGeneration[goldGeneration.length] = info[0] +":"+info[3];
 				}
 				// Increase gold storage
-				else if( info[1] == "Bank")
+				else if( info[2] == "Bank")
 				{
 					log += "\n Bank built or upgraded!";
 					var addNew = true;
@@ -449,16 +448,14 @@ handlers.CheckProgress = function ( args )
 					{
 						log += "\n - "+i+". "+ goldStorage[i];
 						var data = goldStorage[i].split(':');
-						if( data[0] == progress[0])
+						if( data[0] == info[0])
 						{
-							goldStorage[i] = data[0] +":"+info[2];
+							goldStorage[i] = data[0] +":"+info[3];
 							addNew = false;
 						}
 					}
 					if( addNew )
-						goldStorage[goldStorage.length] = progress[0] +":"+info[2];	
-					
-					log += "\n - last ("+goldStorage.length+" - "+addNew+"). "+ progress[0] +":"+info[2];
+						goldStorage[goldStorage.length] = info[0] +":"+info[3];					
 				}			
 				
 				construct.splice(i, 1);
@@ -886,7 +883,7 @@ handlers.Construct = function (args)
 		if( data != "" )
 			data += "|";
 			
-		data += itemInstanceID+":"+ ( currTimeSeconds() + time ) + "," + item.ItemClass +","+upgrade;
+		data += itemInstanceID+","+ ( currTimeSeconds() + time ) + "," + item.ItemClass +","+upgrade;
 		
 		// Update the user "Crafting" data with this building.
 		server.UpdateUserData({
