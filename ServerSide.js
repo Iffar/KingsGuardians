@@ -604,7 +604,6 @@ handlers.CheckProgress = function ( args )
 		var building;
 		for(cnt = 0; cnt < playerInventory.Inventory.length; cnt++)
 		{
-			log+= "\n'"+playerInventory.Inventory[cnt].ItemInstanceId+"' == '"+details[0]+ "' ---> " +(playerInventory.Inventory[cnt].ItemInstanceId == details[0])+"\n";
 			if(playerInventory.Inventory[cnt].ItemInstanceId == details[0])
 				building = playerInventory.Inventory[cnt];				
 		}	
@@ -646,7 +645,7 @@ handlers.CheckProgress = function ( args )
 	}		
 	var repairString = (repair != "" ) ? repair.join("|") : ""; 
 	
-	
+	log += "\n Repairstring: " + repairString;
 	
 	
 	
