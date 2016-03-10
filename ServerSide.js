@@ -55,7 +55,7 @@ function CheckBuildingValue(playerInventory, upgrade, amount)
 		goldCost = 1;	
 	
 	if(playerInventory.VirtualCurrency["GC"] < goldCost)
-		return "You don't have enough gold ("+goldCost+") to upgrade this building!"; 
+		return "You don't have enough gold ("+goldCost+"|"+amount+" = "+multiplier+", "+upgrade+", "+tier+") to upgrade this building!"; 
 	
 	return "";
 }
