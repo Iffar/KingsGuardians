@@ -42,20 +42,20 @@ function CheckBuildingValue(playerInventory, upgrade, amount)
 	
 	// CHECK materials
 	if( tier > 3 && playerInventory.VirtualCurrency["SL"] < amount)
-		return "You don't have enough steel to upgrade this building!";	
+		return "You don't have enough steel ("+amount+") to upgrade this building!";	
 	if( tier > 2 && playerInventory.VirtualCurrency["IR"] < amount)
-		return "You don't have enough iron to upgrade this building!"; 			
+		return "You don't have enough iron ("+amount+") to upgrade this building!"; 			
 	if( tier > 1 && playerInventory.VirtualCurrency["ST"] < amount)
-		return "You don't have enough stone to upgrade this building!"; 		
+		return "You don't have enough stone ("+amount+") to upgrade this building!"; 		
 	if( tier >= 0 && playerInventory.VirtualCurrency["WO"] < amount)
-		return "You don't have enough wood to upgrade this building!"; 
+		return "You don't have enough wood ("+amount+") to upgrade this building!"; 
 	
 	var goldCost = Math.ceil(amount * upgrade / 2);
 	if(goldCost <= 0)
 		goldCost = 1;	
 	
 	if(playerInventory.VirtualCurrency["GC"] < goldCost)
-		return "You don't have enough gold to upgrade this building!"; 
+		return "You don't have enough gold ("+goldCost+") to upgrade this building!"; 
 	
 	return "";
 }
@@ -598,7 +598,7 @@ handlers.CheckProgress = function ( args )
 	var repair = ((typeof userData.Repair != 'undefined') && (typeof userData.Repair.Value != 'undefined') && userData.Repair.Value != "") ? userData.Repair.Value.split('|') : "";
 	for( i = 0; i < repair.length; i++)
 	{
-		var details = repair[i].split(",");	// 0: buildings id, 1: last check time
+		var details = repair[i].split(",");	// 0:BuildingInstanceID, 1:lastCheck, 2:basePrice, 3:damage
 		
 		// Get the building
 		var building;
@@ -832,9 +832,9 @@ handlers.Construct = function (args)
 	if( !itemInstance )
 	{
 		if(playerInventory.VirtualCurrency["WO"] < amount)
-			return { error : "You don't have enough wood to build this building!", serverTime: currTimeSeconds() }; 	
+			return { error : "You don't have enough wood ("+amount+") to build this building!", serverTime: currTimeSeconds() }; 	
 		if(playerInventory.VirtualCurrency["GC"] < item.VirtualCurrencyPrices["GC"])
-			return { error : "You don't have enough gold to build this building!", serverTime: currTimeSeconds() }; 		
+			return { error : "You don't have enough gold ("+item.VirtualCurrencyPrices["GC"]+") to build this building!", serverTime: currTimeSeconds() }; 		
 		
 		if ( typeof amount != 'undefined' )		
 			balance.WO = server.SubtractUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: "WO", Amount: amount}).Balance;	
