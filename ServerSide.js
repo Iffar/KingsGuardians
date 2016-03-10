@@ -34,6 +34,7 @@ function getAllCharacters( playfabID )
 
 function CheckBuildingValue(playerInventory, upgrade, amount)
 {
+	var temp = amount;
 	var tier = parseFloat(upgrade / 10);
 	var multiplier = ( upgrade - Math.floor(tier) * 10);
 	if(multiplier <= 0)
@@ -55,7 +56,7 @@ function CheckBuildingValue(playerInventory, upgrade, amount)
 		goldCost = 1;	
 	
 	if(playerInventory.VirtualCurrency["GC"] < goldCost)
-		return "You don't have enough gold ("+goldCost+"|"+amount+" = "+multiplier+", "+upgrade+", "+tier+") to upgrade this building!"; 
+		return "You don't have enough gold ("+goldCost+"|"+amount+" = "+multiplier+", "+upgrade+", "+tier+","+temp+") to upgrade this building!"; 
 	
 	return "";
 }
