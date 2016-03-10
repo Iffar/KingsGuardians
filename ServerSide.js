@@ -1038,7 +1038,7 @@ handlers.CollectMaterials = function (args)
 		return { error : "You don't own this item ("+playerInventory.Inventory.length+")!", serverTime: currTimeSeconds()  }; 
 	
 	var material = buildingInstance.CustomData.Material;
-	var amount = buildingInstance.CustomData.StoredMaterial;
+	var amount = parseInt(buildingInstance.CustomData.StoredMaterial);
 	var balance = playerInventory.VirtualCurrency;
 	
 	balance[material] = server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: material, Amount: amount}).Balance;	
