@@ -1041,8 +1041,6 @@ handlers.CollectMaterials = function (args)
 	var amount = parseInt(buildingInstance.CustomData.StoredMaterial);
 	var balance = playerInventory.VirtualCurrency;
 	
-	return { error : amount + " of " + material, serverTime: currTimeSeconds()  }; 
-	
 	balance[material] = server.AddUserVirtualCurrency({ PlayFabId: currentPlayerId, VirtualCurrency: material, Amount: amount}).Balance;	
 	buildingInstance.CustomData.StoredMaterial = 0;
 	
