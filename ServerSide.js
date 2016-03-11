@@ -1236,11 +1236,11 @@ handlers.BuyCharacter = function (args)
 		
 		log +="\n CharacterID: " + grantResult[0].ItemInstanceId + ", NativeCard: " + nativeCardId;
 		
-		/*grantResult[cnt].NativeCard = server.GrantItemsToCharacter({
+		grantResult[cnt].NativeCard = server.GrantItemsToCharacter({
 					PlayFabId: currentPlayerId,
 					CharacterId: grantResult[0].ItemInstanceId,
 					ItemIds: [nativeCardId]
-			}).ItemGrantResults.ItemInstanceId;*/
+			}).ItemGrantResults.ItemInstanceId;
 		
 	}	
 		
