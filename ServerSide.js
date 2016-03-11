@@ -1247,7 +1247,7 @@ handlers.BuyCharacter = function (args)
 	return { msg : log, 
 			GrantedCharacterID: grantResult[0].ItemId, 
 			GrantedCharacterInstanceID: grantResult[0].ItemInstanceId,
-			NativeCardID: item.CustomData.NativeCard, 
+			NativeCardID: customData.NativeCard, 
 			NativeCardInstance: grantResult[0].NativeCard, 
 			Balance: balance,
 			serverTime: currTimeSeconds() };
