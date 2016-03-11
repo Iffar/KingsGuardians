@@ -1193,6 +1193,7 @@ handlers.BuyCharacter = function (args)
 	if( typeof item == 'undefined' )
 		return { error : "Can't find item ("+itemID+") in the catalog ("+itemCatalog+")!"  }; 
 	
+	var customData = JSON.parse(item.CustomData);
 	
 	// Get Building Instance
 	var playerInventory = server.GetUserInventory({ PlayFabId: currentPlayerId, CatalogVersion: "Characters" });	
@@ -1231,7 +1232,7 @@ handlers.BuyCharacter = function (args)
 						}).CharacterId;
 						
 		// Add the native card to the character
-		var nativeCardId = item.CustomData["NativeCard"];
+		var nativeCardId = customData.NativeCard;
 		
 		log +="\n CharacterID: " + grantResult[0].ItemInstanceId + ", NativeCard: " + nativeCardId;
 		
