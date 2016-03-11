@@ -1240,7 +1240,13 @@ handlers.BuyCharacter = function (args)
 		
 	}	
 		
-	return { msg : log, GrantedCharacterID: grantResult[0].ItemId, GrantedCharacterInstanceID: grantResult[0].ItemInstanceId, NativeCard: grantResult[0].NativeCard, Balance: balance, serverTime: currTimeSeconds() };
+	return { msg : log, 
+			GrantedCharacterID: grantResult[0].ItemId, 
+			GrantedCharacterInstanceID: grantResult[0].ItemInstanceId,
+			NativeCardID: item.CustomData.NativeCard, 
+			NativeCardInstance: grantResult[0].NativeCard, 
+			Balance: balance,
+			serverTime: currTimeSeconds() };
 }
 
 
