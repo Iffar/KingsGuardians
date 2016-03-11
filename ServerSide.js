@@ -1239,12 +1239,12 @@ handlers.BuyCharacter = function (args)
 		"CharacterId: "+grantResult[0].ItemInstanceId+","+
 		"ItemIds: ["+nativeCardId+"]}";
 		
-		var itemGrantResult = server.GrantItemsToCharacter({
+		/*var itemGrantResult = server.GrantItemsToCharacter({
 					PlayFabId: currentPlayerId,
 					CharacterId: grantResult[0].ItemInstanceId,
 					ItemIds: [nativeCardId]
 			}).ItemGrantResults;
-			
+			*/
 		log += "\nInstanceID: " + itemGrantResult[0].ItemInstanceId;
 		
 	}	
@@ -1252,8 +1252,8 @@ handlers.BuyCharacter = function (args)
 	return { msg : log, 
 			GrantedCharacterID: grantResult[0].ItemId, 
 			GrantedCharacterInstanceID: grantResult[0].ItemInstanceId,
-			NativeCardID: customData.NativeCard, 
-			NativeCardInstance: grantResult[0].NativeCard, 
+		//	NativeCardID: customData.NativeCard, 
+		//	NativeCardInstance: grantResult[0].NativeCard, 
 			Balance: balance,
 			serverTime: currTimeSeconds() };
 }
