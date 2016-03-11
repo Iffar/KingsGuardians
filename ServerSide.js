@@ -1231,7 +1231,7 @@ handlers.BuyCharacter = function (args)
 						}).CharacterId;
 						
 		// Add the native card to the character
-		var nativeCardId = item.CustomData.NativeCard;
+		var nativeCardId = item.CustomData["NativeCard"];
 		
 		log +="\n CharacterID: " + grantResult[0].ItemInstanceId + ", NativeCard: " + nativeCardId;
 		
