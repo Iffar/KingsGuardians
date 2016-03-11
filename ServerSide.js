@@ -1232,11 +1232,14 @@ handlers.BuyCharacter = function (args)
 						
 		// Add the native card to the character
 		var nativeCardId = item.CustomData.NativeCard;
-		grantResult[cnt].NativeCard = server.GrantItemsToCharacter({
+		
+		log +="\n CharacterID: " + grantResult[0].ItemInstanceId + ", NativeCard: " + nativeCardId;
+		
+		/*grantResult[cnt].NativeCard = server.GrantItemsToCharacter({
 					PlayFabId: currentPlayerId,
 					CharacterId: grantResult[0].ItemInstanceId,
 					ItemIds: [nativeCardId]
-			}).ItemGrantResults.ItemInstanceId;
+			}).ItemGrantResults.ItemInstanceId;*/
 		
 	}	
 		
