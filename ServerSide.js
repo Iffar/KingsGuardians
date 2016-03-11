@@ -1240,9 +1240,9 @@ handlers.BuyCharacter = function (args)
 					PlayFabId: currentPlayerId,
 					CharacterId: grantResult[0].ItemInstanceId,
 					ItemIds: [nativeCardId]
-			}).ItemGrantResults.ItemInstanceId;
+			}).ItemGrantResults[0].ItemInstanceId;
 			
-		log += "InstanceID: " + grantResult[cnt].NativeCard;
+		log += "\nInstanceID: " + grantResult[cnt].NativeCard;
 		
 	}	
 		
