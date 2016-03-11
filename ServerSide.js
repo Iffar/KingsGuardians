@@ -1229,9 +1229,18 @@ handlers.BuyCharacter = function (args)
 								CharacterName: grantResult[cnt].DisplayName,
 								CharacterType: grantResult[cnt].ItemId,
 						}).CharacterId;
+						
+		// Add the native card to the character
+		var nativeCardId = item.CustomData.NativeCard;
+		grantResult[cnt].NativeCard = server.GrantItemsToCharacter({
+					PlayFabId: currentPlayerId,
+					CharacterId: grantResult[0].ItemInstanceId,
+					ItemIds: [nativeCardId]
+			}).ItemGrantResults.ItemInstanceId;
+		
 	}	
 		
-	return { msg : log, GrantedCharacterID: grantResult[0].ItemId, GrantedCharacterInstanceID: grantResult[0].ItemInstanceId, Balance: balance, serverTime: currTimeSeconds() };
+	return { msg : log, GrantedCharacterID: grantResult[0].ItemId, GrantedCharacterInstanceID: grantResult[0].ItemInstanceId, NativeCard: grantResult[0].NativeCard, Balance: balance, serverTime: currTimeSeconds() };
 }
 
 
