@@ -103,7 +103,7 @@ handlers.downloadCatalogs = function(args)
 		
 	var catalogData = [];
 	
-	for(i = 0; i < catalogs.length; i++)
+	for(i = 0; i < catalogsss.length; i++)
 	{
 		log += "\n " + i +". - loading " + catalogs[i] + " catalog";
 		catalogData[i] = server.GetCatalogItems({ CatalogVersion: catalogs[i] });
