@@ -98,8 +98,6 @@ handlers.downloadCatalogs = function(args)
 {
 	var log = "ServerLog - downloadCatalogs handler (72.)\n *********\n";
 	
-	a = a + b;
-	
 	var catalogs = args.Catalogs;
 	log += "\n Catalog Versions array length: "+catalogs.length;
 		
