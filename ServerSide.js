@@ -576,8 +576,11 @@ handlers.CheckProgress = function ( args )
 				// Check if the progress finished
 				if(info [0] <= currTimeSeconds())
 				{					
-					log += "\n server.GrantItemsToUser({ PlayFabId: "+currentPlayerId+", ItemIds: "+[info[1]]+" }).";		
-					server.GrantItemsToUser({ PlayFabId: currentPlayerId, ItemIds: [info[1]] });
+					server.GrantItemsToUser({ 
+						PlayFabId: currentPlayerId, 
+						CatalogVersion: info[2],
+						ItemIds: [info[1]] 
+						});
 					
 					progresses.splice(j, 1);
 					needUpdate = true;
@@ -862,7 +865,7 @@ handlers.Construct = function (args)
 	{
 		log += "Item instance is null ("+itemInstance+") -> new item will be granted!";
 		var grantResult = server.GrantItemsToUser({
-						CatalogVersion:  "Buildings",
+						CatalogVersion: "Buildings",
 						PlayFabId: currentPlayerId,
 						ItemIds: [itemID],
 						Annotation: "Constructed.",
@@ -1090,6 +1093,7 @@ handlers.Craft = function (args)
 	
 	
 	// Get Building Instance
+	
 	var playerInventory = server.GetUserInventory({ PlayFabId: currentPlayerId, CatalogVersion: "Buildings" });	
 	var buildingInstance;
 	for(i = 0; i < playerInventory.Inventory.length; i++)
@@ -1103,6 +1107,7 @@ handlers.Craft = function (args)
 	if( typeof buildingInstance == 'undefined' )
 		return { error : "You don't own this item ("+itemID+")!", serverTime: currTimeSeconds()  }; 
 	
+	var catalogVersion = buildingInstance.customData.Catalog;
 	
 	// Check for free crafting slots	
 	var cnt = -1;
@@ -1140,7 +1145,7 @@ handlers.Craft = function (args)
 			var progresses = buildingData[1].split("-");
 			var last = progresses[progresses.length-1].split(",");						
 			finishTime += parseFloat(last[0]);
-			progresses[progresses.length] = finishTime+","+itemID;
+			progresses[progresses.length] = finishTime+","+itemID+","+catalogVersion;
 			
 			buildingData[1] = progresses.join("-");
 		}			
@@ -1148,7 +1153,7 @@ handlers.Craft = function (args)
 		data = craftProgresses.join('|');
 	}
 	else
-		data = buildingInstanceID+":"+(parseFloat(finishTime)+currTimeSeconds())+","+itemID;
+		data = buildingInstanceID+":"+(parseFloat(finishTime)+currTimeSeconds())+","+itemID+","+catalogVersion;
 	
 	server.UpdateUserData({			
 		PlayFabId: currentPlayerId,
@@ -1157,8 +1162,8 @@ handlers.Craft = function (args)
 	
 	
 	// CRAFT DATA: 
-	//		[BuildingInstanceID] : [finish],[itemID] - [finish],[itemID] - [finish],[itemID] |
-	// 		[BuildingInstanceID] : [finish],[itemID] - [finish],[itemID] - [finish],[itemID] |
+	//		[BuildingInstanceID] : [finish],[itemID],[catalogVersion] - [finish],[itemID],[catalogVersion] - [finish],[itemID],[catalogVersion] |
+	// 		[BuildingInstanceID] : [finish],[itemID],[catalogVersion] - [finish],[itemID],[catalogVersion] - [finish],[itemID],[catalogVersion] |
 		
 	return { msg : log, UserDataCraft: data, Balance: balance, serverTime: currTimeSeconds() };
 }
@@ -1239,12 +1244,13 @@ handlers.BuyCharacter = function (args)
 		"CharacterId: "+grantResult[0].ItemInstanceId+","+
 		"ItemIds: ["+nativeCardId+"]}";
 		
-		/*var itemGrantResult = server.GrantItemsToCharacter({
+		var itemGrantResult = server.GrantItemsToCharacter({
 					PlayFabId: currentPlayerId,
 					CharacterId: grantResult[0].ItemInstanceId,
+					CatalogVersion: "MagicCards"
 					ItemIds: [nativeCardId]
 			}).ItemGrantResults;
-			*/
+			
 		log += "\nInstanceID: " + itemGrantResult[0].ItemInstanceId;
 		
 	}	
@@ -1404,14 +1410,19 @@ handlers.raidReward = function(args)
 	}
 		
 	// Transfer card
-	var itemIds = [];
+	var itemIdsByCatalog = {};
+	
 	for(var j = 0; j < cards.length; j++)
 	{
 		if( cards[j] != "")
 		{
-			var info = cards[j].split(":");
+			var info = cards[j].split(":");			
 			server.RevokeInventoryItem({PlayFabId: enemyPlayerID, ItemInstanceId: info[0]});
-			itemIds[itemIds.length] = info[1];
+			
+			if( typeof itemIdsByCatalog[info[2]] == "undefined")
+				itemIdsByCatalog[info[2]] = [];			
+			
+			itemIdsByCatalog[info[2]][itemIds.length] = info[1];
 		}
 	}
 	
@@ -1432,8 +1443,15 @@ handlers.raidReward = function(args)
 				});				
 	}
 	
-	if( itemIds.length > 0)
-		server.GrantItemsToUser({PlayFabId: currentPlayerId, ItemIds: itemIds});
+	for (var key in itemIdsByCatalog) 
+	{
+		if( itemIdsByCatalog[key].length > 0)
+			server.GrantItemsToUser({
+				PlayFabId: currentPlayerId, 
+				CatalogVersion: key
+				ItemIds: itemIdsByCatalog[key]
+				});
+	}
 	
 	return { msg: log };
 }
