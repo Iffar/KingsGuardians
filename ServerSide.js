@@ -98,12 +98,14 @@ handlers.downloadCatalogs = function(args)
 {
 	var log = "ServerLog - downloadCatalogs handler (72.)\n *********\n";
 	
+	a = a + b;
+	
 	var catalogs = args.Catalogs;
 	log += "\n Catalog Versions array length: "+catalogs.length;
 		
 	var catalogData = [];
 	
-	for(i = 0; i < catalogsss.length; i++)
+	for(i = 0; i < catalogs.length; i++)
 	{
 		log += "\n " + i +". - loading " + catalogs[i] + " catalog";
 		catalogData[i] = server.GetCatalogItems({ CatalogVersion: catalogs[i] });
