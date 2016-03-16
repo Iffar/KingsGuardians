@@ -101,6 +101,8 @@ handlers.downloadCatalogs = function(args)
 	var catalogs = args.Catalogs;
 	log += "\n Catalog Versions array length: "+catalogs.length;
 	
+	return { msg: log, serverTime: currTimeSeconds() };
+	
 	var catalogData = [];
 	
 	for(i = 0; i < catalogs.length; i++)
