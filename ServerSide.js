@@ -1412,7 +1412,7 @@ handlers.raidReward = function(args)
 	// Transfer card
 	var itemIdsByCatalog = {};
 	
-	for(var j = 0; j < cards.length; j++)
+	/*for(var j = 0; j < cards.length; j++)
 	{
 		if( cards[j] != "")
 		{
@@ -1424,7 +1424,7 @@ handlers.raidReward = function(args)
 			
 			itemIdsByCatalog[info[2]][itemIds.length] = info[1];
 		}
-	}
+	}*/
 	
 	// Update building health
 	var buildingDamages = {}
