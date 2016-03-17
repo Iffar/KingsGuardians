@@ -1443,7 +1443,7 @@ handlers.raidReward = function(args)
 				});				
 	}
 	
-	for (var key in itemIdsByCatalog) 
+/*	for (var key in itemIdsByCatalog) 
 	{
 		if( itemIdsByCatalog[key].length > 0)
 			server.GrantItemsToUser({
@@ -1451,7 +1451,7 @@ handlers.raidReward = function(args)
 				CatalogVersion: key,
 				ItemIds: itemIdsByCatalog[key]
 				});
-	}
+	}*/
 	
 	return { msg: log };
 }
