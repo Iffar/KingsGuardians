@@ -1448,7 +1448,7 @@ handlers.raidReward = function(args)
 		if( itemIdsByCatalog[key].length > 0)
 			server.GrantItemsToUser({
 				PlayFabId: currentPlayerId, 
-				CatalogVersion: key
+				CatalogVersion: key,
 				ItemIds: itemIdsByCatalog[key]
 				});
 	}
