@@ -576,12 +576,12 @@ handlers.CheckProgress = function ( args )
 				// Check if the progress finished
 				if(info [0] <= currTimeSeconds())
 				{					
-				/*	server.GrantItemsToUser({ 
+					server.GrantItemsToUser({ 
 						PlayFabId: currentPlayerId, 
 						CatalogVersion: info[2],
 						ItemIds: [info[1]] 
 						});
-					*/
+					
 					progresses.splice(j, 1);
 					needUpdate = true;
 				}					
@@ -1107,7 +1107,8 @@ handlers.Craft = function (args)
 	if( typeof buildingInstance == 'undefined' )
 		return { error : "You don't own this item ("+itemID+")!", serverTime: currTimeSeconds()  }; 
 	
-	var catalogVersion = buildingInstance.customData.Catalog;
+	var catalogVersion = "";
+	//var catalogVersion = buildingInstance.customData.Catalog;
 	
 	// Check for free crafting slots	
 	var cnt = -1;
@@ -1405,7 +1406,7 @@ handlers.raidReward = function(args)
 	}
 		
 	// Transfer card
-	var itemIdsByCatalog = {};
+	//var itemIdsByCatalog = {};
 	
 	/*for(var j = 0; j < cards.length; j++)
 	{
