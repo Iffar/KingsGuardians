@@ -96,20 +96,21 @@ function SubtractCurrencyForBuilding(upgrade, amount, balance)
 /* This function query all the catalogs given in the 'args.Catalogs' parameter. */
 handlers.downloadCatalogs = function(args)	
 {
-	var log = "ServerLog - downloadCatalogs handler (72.)\n *********\n";
+	var message = "ServerLog - downloadCatalogs handler (72.)\n *********\n";
 	
 	var catalogs = args.Catalogs;
-	log += "\n Catalog Versions array length: "+catalogs.length;
+	message += "\n Catalog Versions array length: "+catalogs.length;
 		
 	var catalogData = [];
 	
 	for(i = 0; i < catalogs.length; i++)
 	{
-		log += "\n " + i +". - loading " + catalogs[i] + " catalog";
+		message += "\n " + i +". - loading " + catalogs[i] + " catalog";
 		catalogData[i] = server.GetCatalogItems({ CatalogVersion: catalogs[i] });
 	}
 	
-	return {msg : log, Catalogs : catalogData, serverTime: currTimeSeconds()};
+	log.info(message);
+	return {msg : message, Catalogs : catalogData, serverTime: currTimeSeconds()};
 }
 
 /* This method returns the data of the specified player. 
